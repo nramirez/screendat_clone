@@ -69,6 +69,8 @@ class _HomeState extends State<Home> {
           Navigator.of(context).push(MaterialPageRoute<void>(
             builder: (context) => SlideShow(
               urls: images,
+              toggleFavorite: cubit.toggleFavorite,
+              isFavorite: cubit.isFavorite,
             ),
           ));
         },

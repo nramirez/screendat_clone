@@ -1,9 +1,9 @@
-import 'package:bloc/bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:midjourney_api/midjourney_api.dart';
 
 part 'gallery_state.dart';
 
-class GalleryCubit extends Cubit<GalleryState> {
+class GalleryCubit extends HydratedCubit<GalleryState> {
   GalleryCubit({
     required this.api,
   }) : super(GalleryState());
@@ -40,5 +40,16 @@ class GalleryCubit extends Cubit<GalleryState> {
           ..sort((a, b) => b.value.compareTo(a.value)))
         .map((e) => e.key)
         .toList();
+  }
+
+  @override
+  GalleryState? fromJson(Map<String, dynamic> json) {
+    final favorites = json['favorites'] as Map<String, dynamic>;
+    return GalleryState(favorites: favorites.cast<String, int>());
+  }
+
+  @override
+  Map<String, dynamic>? toJson(GalleryState state) {
+    return {'favorites': state.favorites};
   }
 }
