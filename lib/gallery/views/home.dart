@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slideshow/slideshow.dart';
 
 import 'package:screendat_clone/gallery/cubit/gallery_cubit.dart';
 import 'package:screendat_clone/gallery/views/gallery_page.dart';
@@ -47,6 +48,19 @@ class _HomeState extends State<Home> {
             label: 'Recent',
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          final images =
+              pageController.page == 0 ? cubit.state.top : cubit.state.recent;
+
+          Navigator.of(context).push(MaterialPageRoute<void>(
+            builder: (context) => SlideShow(
+              urls: images,
+            ),
+          ));
+        },
+        child: const Icon(Icons.play_arrow),
       ),
     );
   }
