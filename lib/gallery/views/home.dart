@@ -5,6 +5,7 @@ import 'package:flutter_slideshow/slideshow.dart';
 import 'package:screendat_clone/gallery/cubit/gallery_cubit.dart';
 import 'package:screendat_clone/gallery/views/favorite_page.dart';
 import 'package:screendat_clone/gallery/views/gallery_page.dart';
+import 'package:screendat_clone/gallery/views/privacy_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -41,15 +42,43 @@ class _HomeState extends State<Home> {
               images = cubit.sortedFavorites();
             }
 
-            Navigator.of(context).push(MaterialPageRoute<void>(
-              builder: (context) => SlideShow(
-                urls: images,
-                toggleFavorite: cubit.toggleFavorite,
-                isFavorite: cubit.isFavorite,
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (context) => SlideShow(
+                  urls: images,
+                  toggleFavorite: cubit.toggleFavorite,
+                  isFavorite: cubit.isFavorite,
+                ),
               ),
-            ));
+            );
           },
           child: const Icon(Icons.play_arrow),
+        ),
+
+        TextButton(
+          onPressed: () {
+            showAboutDialog(
+              context: context,
+              applicationName: 'ScreenDat',
+              applicationVersion: '1.0.0',
+              applicationLegalese:
+                  'iTrydat.com © ${DateTime.now().year} ScreenDat',
+              applicationIcon: const FlutterLogo(),
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (context) => const PrivacyPage(),
+                      ),
+                    );
+                  },
+                  child: const Text('Privacy Policy'),
+                ),
+              ],
+            );
+          },
+          child: const Text('Terms & Privacy'),
         )
       ],
     );
