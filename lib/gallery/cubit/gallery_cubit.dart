@@ -18,6 +18,11 @@ class GalleryCubit extends HydratedCubit<GalleryState> {
     emit(state.copyWith(top: top, recent: recent));
   }
 
+  /// Toggle the view between list and grid.
+  void toggleView() {
+    emit(state.copyWith(isListView: !state.isListView));
+  }
+
   bool isFavorite(String url) {
     return state.favorites.containsKey(url);
   }
@@ -45,11 +50,17 @@ class GalleryCubit extends HydratedCubit<GalleryState> {
   @override
   GalleryState? fromJson(Map<String, dynamic> json) {
     final favorites = json['favorites'] as Map<String, dynamic>;
-    return GalleryState(favorites: favorites.cast<String, int>());
+    return GalleryState(
+      favorites: favorites.cast<String, int>(),
+      isListView: json['isListView'] as bool? ?? true,
+    );
   }
 
   @override
   Map<String, dynamic>? toJson(GalleryState state) {
-    return {'favorites': state.favorites};
+    return {
+      'favorites': state.favorites,
+      'isListView': state.isListView,
+    };
   }
 }

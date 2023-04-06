@@ -16,6 +16,45 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final pageController = PageController();
 
+  Widget actionButtons() {
+    final cubit = context.watch<GalleryCubit>();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        /// Toggle between list and grid view.
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: FloatingActionButton(
+            onPressed: cubit.toggleView,
+            child: cubit.state.isListView
+                ? const Icon(Icons.grid_on)
+                : const Icon(Icons.list),
+          ),
+        ),
+
+        FloatingActionButton(
+          onPressed: () {
+            var images = cubit.state.top;
+            if (pageController.page == 1) {
+              images = cubit.state.recent;
+            } else if (pageController.page == 2) {
+              images = cubit.sortedFavorites();
+            }
+
+            Navigator.of(context).push(MaterialPageRoute<void>(
+              builder: (context) => SlideShow(
+                urls: images,
+                toggleFavorite: cubit.toggleFavorite,
+                isFavorite: cubit.isFavorite,
+              ),
+            ));
+          },
+          child: const Icon(Icons.play_arrow),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<GalleryCubit>();
@@ -57,25 +96,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          var images = cubit.state.top;
-          if (pageController.page == 1) {
-            images = cubit.state.recent;
-          } else if (pageController.page == 2) {
-            images = cubit.sortedFavorites();
-          }
-
-          Navigator.of(context).push(MaterialPageRoute<void>(
-            builder: (context) => SlideShow(
-              urls: images,
-              toggleFavorite: cubit.toggleFavorite,
-              isFavorite: cubit.isFavorite,
-            ),
-          ));
-        },
-        child: const Icon(Icons.play_arrow),
-      ),
+      floatingActionButton: actionButtons(),
     );
   }
 }
