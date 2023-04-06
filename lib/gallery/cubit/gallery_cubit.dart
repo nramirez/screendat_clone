@@ -17,4 +17,28 @@ class GalleryCubit extends Cubit<GalleryState> {
 
     emit(state.copyWith(top: top, recent: recent));
   }
+
+  bool isFavorite(String url) {
+    return state.favorites.containsKey(url);
+  }
+
+  /// Toggle the favorite status of an image.
+  void toggleFavorite(String url) {
+    final favorites = Map<String, int>.from(state.favorites);
+
+    if (favorites.containsKey(url)) {
+      favorites.remove(url);
+    } else {
+      favorites[url] = DateTime.now().millisecondsSinceEpoch;
+    }
+
+    emit(state.copyWith(favorites: favorites));
+  }
+
+  List<String> sortedFavorites() {
+    return (state.favorites.entries.toList()
+          ..sort((a, b) => b.value.compareTo(a.value)))
+        .map((e) => e.key)
+        .toList();
+  }
 }

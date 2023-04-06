@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slideshow/slideshow.dart';
 
 import 'package:screendat_clone/gallery/cubit/gallery_cubit.dart';
+import 'package:screendat_clone/gallery/views/favorite_page.dart';
 import 'package:screendat_clone/gallery/views/gallery_page.dart';
 
 class Home extends StatefulWidget {
@@ -23,11 +24,14 @@ class _HomeState extends State<Home> {
         controller: pageController,
         children: [
           GalleryPage(
+            title: 'top',
             images: cubit.state.top,
           ),
           GalleryPage(
+            title: 'recent',
             images: cubit.state.recent,
           ),
+          const FavoritePage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -47,12 +51,20 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.history),
             label: 'Recent',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final images =
-              pageController.page == 0 ? cubit.state.top : cubit.state.recent;
+          var images = cubit.state.top;
+          if (pageController.page == 1) {
+            images = cubit.state.recent;
+          } else if (pageController.page == 2) {
+            images = cubit.sortedFavorites();
+          }
 
           Navigator.of(context).push(MaterialPageRoute<void>(
             builder: (context) => SlideShow(
