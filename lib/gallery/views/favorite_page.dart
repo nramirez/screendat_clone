@@ -1,5 +1,4 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:screendat_clone/gallery/cubit/gallery_cubit.dart';
 import 'package:screendat_clone/gallery/views/gallery_page.dart';
